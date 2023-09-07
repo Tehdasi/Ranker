@@ -12,7 +12,5 @@ namespace Ranker
 		public DateTime date;
 		public bool add;
 		public int initialRank;
-        public int floor;
-
 	}
 }

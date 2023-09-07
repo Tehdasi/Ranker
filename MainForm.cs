@@ -82,9 +82,27 @@ namespace Ranker
 
             RefreshGamesList();
             rankingAlgo = model.DefaultRankingAlgo();
+
+            RefreshPlayerGrid();
         }
 
-        Game SelectedGame()
+		void RefreshPlayerGrid()
+        {
+            List<Player> ps = model.players.Where(p => !p.fake).ToList();
+            playersGrid.RowCount= ps.Count+1;
+
+            for( int i= 0; i< ps.Count; i++ )
+            {
+                Player p= ps[i];
+
+                playersGrid.Rows[i].Tag = p;
+
+                playersGrid[namePlayerColumn.Index, i].Value = p.realname;
+				playersGrid[initialRankPlayerColumn.Index, i].Value = p.initialRank;
+			}
+		}
+
+		Game SelectedGame()
         {
             return gameLookup[gamesListBox.SelectedIndex];
         }
@@ -159,8 +177,8 @@ namespace Ranker
             if (false)
             {
                 int[]
-                    wins = new int[model.realPlayers.Count],
-                    losses = new int[model.realPlayers.Count];
+                    wins = new int[model.players.Count],
+                    losses = new int[model.players.Count];
 
                 foreach (Game g in model.games)
                 {
@@ -169,9 +187,9 @@ namespace Ranker
                         foreach (Player p in g.players)
                         {
                             int pl = 0;
-                            for (int i = 0; i < model.realPlayers.Count; i++)
+                            for (int i = 0; i < model.players.Count; i++)
                             {
-                                if (model.realPlayers[i] == p.realname)
+                                if (model.players[i].realname == p.realname)
                                     pl = i;
                             }
 
@@ -183,9 +201,9 @@ namespace Ranker
                     }
                 }
 
-                for (int i = 0; i < model.realPlayers.Count; i++)
+                for (int i = 0; i < model.players.Count; i++)
                 {
-                    Debug.WriteLine(model.realPlayers[i] + " " + wins[i] + " " + losses[i]);
+                    Debug.WriteLine(model.players[i] + " " + wins[i] + " " + losses[i]);
                 }
             }
 
@@ -540,24 +558,6 @@ namespace Ranker
         }
 
 
-        bool SameFloor(List<PlayerInfo> team)
-        {
-            int floor = 0;
-            foreach (PlayerInfo p in team)
-            {
-                if (!p.real)
-                    continue;
-
-                if (floor == 0)
-                    floor = p.floor;
-                else
-                    if (floor != p.floor)
-                    return false;
-            }
-
-            return true;
-        }
-
         int PlayerTeam(int split, List<PlayerInfo> players, string playerName)
         {
             for (int i = 0; i < players.Count; i++)
@@ -803,13 +803,6 @@ namespace Ranker
                         team2.Add(players[j]);
                 }
 
-                if (floorMatchCheckBox.Checked)
-                {
-                    // ignore games when the teams are not all on the same floor
-                    if (!SameFloor(team1) || !SameFloor(team2))
-                        continue;
-                }
-
                 // don't allow unbalanced teams.
                 if (playerBalanceCheckBox.Checked &&
                     ((team1.Count > (team2.Count + 1)) ||
@@ -970,5 +963,51 @@ namespace Ranker
         {
             model.defaultRankingAlgo = model.algos[1];
         }
-    }
+
+		private void OnPlayerCellEndEdit(object sender, DataGridViewCellEventArgs e)
+		{
+            Player p= playersGrid.Rows[e.RowIndex].Tag as Player;
+			string name = (string)playersGrid[namePlayerColumn.Index, e.RowIndex].Value ?? "";
+			string initialRankStr = (string)playersGrid[initialRankPlayerColumn.Index, e.RowIndex].Value ?? "";
+            int initialRank = -1;
+            
+            if( e.ColumnIndex == initialRankPlayerColumn.Index )
+            {
+                if (!int.TryParse(initialRankStr, out initialRank))
+                {
+                    playersGrid[initialRankPlayerColumn.Index, e.RowIndex].Style.ForeColor = Color.Red;
+                    MessageBox.Show("Initial rank has to be a number");
+                    return;
+                }
+                else
+                    playersGrid[initialRankPlayerColumn.Index, e.RowIndex].Style.ForeColor = Color.Black;
+			}
+
+
+            if (p != null)
+            {
+                if (name != p.realname || initialRank != p.initialRank)
+                {
+                    // new pe
+                    model.UpdatePlayer( name, initialRank );
+                }
+
+            }
+            else
+            {
+                // no player for this row, ergo we are entering a new player
+                if (name != "" && initialRank != -1)
+                {
+                    // make sure player name is not a duplicate
+                    if (model.players.Any(x => x.realname == name))
+                    {
+						MessageBox.Show("That player already exists");
+						return;
+					}
+
+                    model.UpdatePlayer( name, initialRank );
+                }
+            }
+		}
+	}
 }

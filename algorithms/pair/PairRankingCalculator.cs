@@ -53,7 +53,6 @@ namespace Ranker
 				pi.score = 0;
 				pi.games = 0;
 				pi.name = pe.name;
-				pi.floor = pe.floor;
 				pi.real = true;
 				pi.onSide = new Dictionary<string, int>();
 				playerInfo.Add(pe.name, pi);

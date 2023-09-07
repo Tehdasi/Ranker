@@ -15,8 +15,7 @@ namespace Ranker
 	{
 		SQLiteConnection dbConnection;
 		public List<Game> games;
-		public List<string> realPlayers;
-		Dictionary<string, string> namelookup;
+		public List<Player> players;
 		public List<PlayerEvent> playerEvents;
 		public List<RankingAlgorithm> algos;
 		public RankingAlgorithm defaultRankingAlgo;
@@ -26,10 +25,9 @@ namespace Ranker
 		public void Start()
 		{
 			const string dbPath = "ranker.sqlite";
-			namelookup = new Dictionary<string, string>();
 
 			games = new List<Game>();
-			dbConnection = new SQLiteConnection("data source=" + dbPath + ";");
+			dbConnection = new SQLiteConnection($"data source={dbPath};");
 			dbConnection.Open();
 
 
@@ -54,12 +52,8 @@ namespace Ranker
 						id INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
 						date DATETIME  NOT NULL,
 						initialRank INTEGER  NULL,
-						name TEXT  NULL,
-						floor INTEGER  NULL );");
+						name TEXT  NULL );");
 			}
-			
-
-
 
 			algos = new List<RankingAlgorithm>();
 
@@ -219,8 +213,9 @@ namespace Ranker
 		public void LoadPlayerEvents()
 		{
 			playerEvents = new List<PlayerEvent>();
+			players = new List<Player>();
 
-			SQLiteCommand comm = new SQLiteCommand("select id, date, initialRank, name, floor from playerEvent order by date", dbConnection);
+			SQLiteCommand comm = new SQLiteCommand("select id, date, initialRank, name from playerEvent order by date", dbConnection);
 			SQLiteDataReader reader = comm.ExecuteReader();
 
 			while (reader.Read())
@@ -231,28 +226,32 @@ namespace Ranker
 				pe.date = reader.GetDateTime(1);
 				pe.initialRank = reader.GetInt32(2);
 				pe.name = reader.GetString(3);
-                pe.floor = reader.GetInt32(4);
 
 				playerEvents.Add( pe );
+
+				var p = players.Find(p2 => p2.realname == pe.name);
+
+				if (p == null)
+				{
+					p = new Player();
+					p.fake = false;
+					p.realname = pe.name;
+					players.Add(p);
+				}
+
+				p.initialRank = pe.initialRank;
+
 			}
 			reader.Close();
 
-			realPlayers = new List<string>();
 
-			for (int i = 0; i < playerEvents.Count; i++)
+			for (int i = 2; i <= 6; i++)
 			{
-				PlayerEvent pe= playerEvents[ i ];
-
-				if ( !realPlayers.Contains( pe.name ) )
-					realPlayers.Add(pe.name);
+				Player p= new Player();
+				p.realname = $"EmptyLane{i}";
+				p.fake = true;
+				players.Add(p);
 			}
-
-
-			realPlayers.Add("EmptyLane2");
-			realPlayers.Add("EmptyLane3");
-			realPlayers.Add("EmptyLane4");
-			realPlayers.Add("EmptyLane5");
-			realPlayers.Add("EmptyLane6");
 		}
 
 		public RankingCalculator GetCalculator()
@@ -260,6 +259,25 @@ namespace Ranker
 			RankingCalculator ec= defaultRankingAlgo.GetCalculator();
 			ec.SetPlayerEvents(playerEvents);
 			return ec;
+		}
+
+		public void UpdatePlayer(string name, int initialRank)
+		{
+			Player p = players.Find( x=> x.realname== name );
+
+			if (p == null)
+			{
+				p = new Player();
+				p.fake = false;
+				p.realname = name;
+				p.initialRank = initialRank;
+				players.Add(p);
+			}
+
+			p.realname = name;
+			p.initialRank = initialRank;
+
+			DbNonQuery(null, $"insert into playerevent (date,initialRank,name) values (datetime('now','localtime'),{p.initialRank},'{p.realname}')");
 		}
 
 		public List<string> ActivePlayers(DateTime date)

@@ -30,43 +30,48 @@ namespace Ranker
 		private void InitializeComponent()
 		{
 			this.graphsPage = new System.Windows.Forms.TabPage();
-			this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.graphComboBox = new System.Windows.Forms.ComboBox();
+			this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
-			this.notPlayingView = new System.Windows.Forms.ListView();
-			this.team1View = new System.Windows.Forms.ListView();
-			this.team2View = new System.Windows.Forms.ListView();
-			this.team2WinLabel = new System.Windows.Forms.Label();
-			this.team1WinLabel = new System.Windows.Forms.Label();
-			this.button6 = new System.Windows.Forms.Button();
-			this.button8 = new System.Windows.Forms.Button();
-			this.button9 = new System.Windows.Forms.Button();
-			this.rule1CheckBox = new System.Windows.Forms.CheckBox();
-			this.rule2CheckBox = new System.Windows.Forms.CheckBox();
-			this.biasComboBox = new System.Windows.Forms.ComboBox();
-			this.inFavourRadioButton = new System.Windows.Forms.RadioButton();
-			this.againstRadioButton = new System.Windows.Forms.RadioButton();
 			this.playerBalanceCheckBox = new System.Windows.Forms.CheckBox();
-			this.floorMatchCheckBox = new System.Windows.Forms.CheckBox();
+			this.againstRadioButton = new System.Windows.Forms.RadioButton();
+			this.inFavourRadioButton = new System.Windows.Forms.RadioButton();
+			this.biasComboBox = new System.Windows.Forms.ComboBox();
+			this.rule2CheckBox = new System.Windows.Forms.CheckBox();
+			this.rule1CheckBox = new System.Windows.Forms.CheckBox();
+			this.button9 = new System.Windows.Forms.Button();
+			this.button8 = new System.Windows.Forms.Button();
+			this.button6 = new System.Windows.Forms.Button();
+			this.team1WinLabel = new System.Windows.Forms.Label();
+			this.team2WinLabel = new System.Windows.Forms.Label();
+			this.team2View = new System.Windows.Forms.ListView();
+			this.team1View = new System.Windows.Forms.ListView();
+			this.notPlayingView = new System.Windows.Forms.ListView();
 			this.reportsTabPage = new System.Windows.Forms.TabPage();
-			this.button7 = new System.Windows.Forms.Button();
-			this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
 			this.webBrowser1 = new System.Windows.Forms.WebBrowser();
+			this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
+			this.button7 = new System.Windows.Forms.Button();
 			this.gamesTab = new System.Windows.Forms.TabPage();
-			this.gamesListBox = new System.Windows.Forms.ListBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.gameFilterComboBox = new System.Windows.Forms.ComboBox();
-			this.reviewTeam1Label = new System.Windows.Forms.Label();
-			this.reviewTeam2Label = new System.Windows.Forms.Label();
 			this.deleteButton = new System.Windows.Forms.Button();
+			this.reviewTeam2Label = new System.Windows.Forms.Label();
+			this.reviewTeam1Label = new System.Windows.Forms.Label();
+			this.gameFilterComboBox = new System.Windows.Forms.ComboBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.gamesListBox = new System.Windows.Forms.ListBox();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
+			this.playersTabPage = new System.Windows.Forms.TabPage();
+			this.playersGrid = new System.Windows.Forms.DataGridView();
+			this.namePlayerColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.initialRankPlayerColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.graphsPage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
 			this.tabPage4.SuspendLayout();
 			this.reportsTabPage.SuspendLayout();
 			this.gamesTab.SuspendLayout();
 			this.tabControl1.SuspendLayout();
+			this.playersTabPage.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.playersGrid)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// graphsPage
@@ -82,6 +87,17 @@ namespace Ranker
 			this.graphsPage.Text = "Graphs";
 			this.graphsPage.UseVisualStyleBackColor = true;
 			// 
+			// graphComboBox
+			// 
+			this.graphComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.graphComboBox.FormattingEnabled = true;
+			this.graphComboBox.Location = new System.Drawing.Point(12, 9);
+			this.graphComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.graphComboBox.Name = "graphComboBox";
+			this.graphComboBox.Size = new System.Drawing.Size(520, 28);
+			this.graphComboBox.TabIndex = 1;
+			this.graphComboBox.SelectedIndexChanged += new System.EventHandler(this.OnGraphSelected);
+			// 
 			// chart
 			// 
 			this.chart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -95,20 +111,8 @@ namespace Ranker
 			this.chart.TabIndex = 0;
 			this.chart.Text = "chart1";
 			// 
-			// graphComboBox
-			// 
-			this.graphComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.graphComboBox.FormattingEnabled = true;
-			this.graphComboBox.Location = new System.Drawing.Point(12, 9);
-			this.graphComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.graphComboBox.Name = "graphComboBox";
-			this.graphComboBox.Size = new System.Drawing.Size(520, 28);
-			this.graphComboBox.TabIndex = 1;
-			this.graphComboBox.SelectedIndexChanged += new System.EventHandler(this.OnGraphSelected);
-			// 
 			// tabPage4
 			// 
-			this.tabPage4.Controls.Add(this.floorMatchCheckBox);
 			this.tabPage4.Controls.Add(this.playerBalanceCheckBox);
 			this.tabPage4.Controls.Add(this.againstRadioButton);
 			this.tabPage4.Controls.Add(this.inFavourRadioButton);
@@ -132,6 +136,158 @@ namespace Ranker
 			this.tabPage4.Text = "Organise";
 			this.tabPage4.UseVisualStyleBackColor = true;
 			// 
+			// playerBalanceCheckBox
+			// 
+			this.playerBalanceCheckBox.AutoSize = true;
+			this.playerBalanceCheckBox.Checked = true;
+			this.playerBalanceCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.playerBalanceCheckBox.Location = new System.Drawing.Point(202, 665);
+			this.playerBalanceCheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.playerBalanceCheckBox.Name = "playerBalanceCheckBox";
+			this.playerBalanceCheckBox.Size = new System.Drawing.Size(138, 24);
+			this.playerBalanceCheckBox.TabIndex = 15;
+			this.playerBalanceCheckBox.Text = "Player balance";
+			this.playerBalanceCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// againstRadioButton
+			// 
+			this.againstRadioButton.AutoSize = true;
+			this.againstRadioButton.Location = new System.Drawing.Point(324, 585);
+			this.againstRadioButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.againstRadioButton.Name = "againstRadioButton";
+			this.againstRadioButton.Size = new System.Drawing.Size(86, 24);
+			this.againstRadioButton.TabIndex = 14;
+			this.againstRadioButton.Text = "against";
+			this.againstRadioButton.UseVisualStyleBackColor = true;
+			// 
+			// inFavourRadioButton
+			// 
+			this.inFavourRadioButton.AutoSize = true;
+			this.inFavourRadioButton.Checked = true;
+			this.inFavourRadioButton.Location = new System.Drawing.Point(324, 549);
+			this.inFavourRadioButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.inFavourRadioButton.Name = "inFavourRadioButton";
+			this.inFavourRadioButton.Size = new System.Drawing.Size(112, 24);
+			this.inFavourRadioButton.TabIndex = 13;
+			this.inFavourRadioButton.TabStop = true;
+			this.inFavourRadioButton.Text = "in favour of";
+			this.inFavourRadioButton.UseVisualStyleBackColor = true;
+			// 
+			// biasComboBox
+			// 
+			this.biasComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.biasComboBox.FormattingEnabled = true;
+			this.biasComboBox.Location = new System.Drawing.Point(459, 548);
+			this.biasComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.biasComboBox.Name = "biasComboBox";
+			this.biasComboBox.Size = new System.Drawing.Size(180, 28);
+			this.biasComboBox.TabIndex = 12;
+			// 
+			// rule2CheckBox
+			// 
+			this.rule2CheckBox.AutoSize = true;
+			this.rule2CheckBox.Location = new System.Drawing.Point(202, 551);
+			this.rule2CheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.rule2CheckBox.Name = "rule2CheckBox";
+			this.rule2CheckBox.Size = new System.Drawing.Size(110, 24);
+			this.rule2CheckBox.TabIndex = 11;
+			this.rule2CheckBox.Text = "Bias game";
+			this.rule2CheckBox.UseVisualStyleBackColor = true;
+			// 
+			// rule1CheckBox
+			// 
+			this.rule1CheckBox.AutoSize = true;
+			this.rule1CheckBox.Checked = true;
+			this.rule1CheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.rule1CheckBox.Location = new System.Drawing.Point(202, 631);
+			this.rule1CheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.rule1CheckBox.Name = "rule1CheckBox";
+			this.rule1CheckBox.Size = new System.Drawing.Size(360, 24);
+			this.rule1CheckBox.TabIndex = 10;
+			this.rule1CheckBox.Text = "1st and 2nd players may not be on same team";
+			this.rule1CheckBox.UseVisualStyleBackColor = true;
+			// 
+			// button9
+			// 
+			this.button9.Location = new System.Drawing.Point(393, 462);
+			this.button9.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.button9.Name = "button9";
+			this.button9.Size = new System.Drawing.Size(182, 35);
+			this.button9.TabIndex = 7;
+			this.button9.Text = "Won";
+			this.button9.UseVisualStyleBackColor = true;
+			this.button9.Click += new System.EventHandler(this.OnTeam2Win);
+			// 
+			// button8
+			// 
+			this.button8.Location = new System.Drawing.Point(202, 462);
+			this.button8.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.button8.Name = "button8";
+			this.button8.Size = new System.Drawing.Size(182, 35);
+			this.button8.TabIndex = 6;
+			this.button8.Text = "Won";
+			this.button8.UseVisualStyleBackColor = true;
+			this.button8.Click += new System.EventHandler(this.OnTeam1Win);
+			// 
+			// button6
+			// 
+			this.button6.Location = new System.Drawing.Point(202, 506);
+			this.button6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.button6.Name = "button6";
+			this.button6.Size = new System.Drawing.Size(372, 35);
+			this.button6.TabIndex = 5;
+			this.button6.Text = "Autobalance";
+			this.button6.UseVisualStyleBackColor = true;
+			this.button6.Click += new System.EventHandler(this.OnAutobalance);
+			// 
+			// team1WinLabel
+			// 
+			this.team1WinLabel.Location = new System.Drawing.Point(202, 9);
+			this.team1WinLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.team1WinLabel.Name = "team1WinLabel";
+			this.team1WinLabel.Size = new System.Drawing.Size(182, 23);
+			this.team1WinLabel.TabIndex = 4;
+			this.team1WinLabel.Text = "Team 1";
+			// 
+			// team2WinLabel
+			// 
+			this.team2WinLabel.Location = new System.Drawing.Point(393, 9);
+			this.team2WinLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.team2WinLabel.Name = "team2WinLabel";
+			this.team2WinLabel.Size = new System.Drawing.Size(182, 23);
+			this.team2WinLabel.TabIndex = 3;
+			this.team2WinLabel.Text = "Team 2";
+			// 
+			// team2View
+			// 
+			this.team2View.AllowDrop = true;
+			this.team2View.HideSelection = false;
+			this.team2View.Location = new System.Drawing.Point(393, 37);
+			this.team2View.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.team2View.Name = "team2View";
+			this.team2View.Size = new System.Drawing.Size(180, 413);
+			this.team2View.TabIndex = 2;
+			this.team2View.UseCompatibleStateImageBehavior = false;
+			this.team2View.View = System.Windows.Forms.View.List;
+			this.team2View.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.OnStartDrag);
+			this.team2View.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnDragDrop);
+			this.team2View.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnDragEnter);
+			// 
+			// team1View
+			// 
+			this.team1View.AllowDrop = true;
+			this.team1View.HideSelection = false;
+			this.team1View.Location = new System.Drawing.Point(202, 37);
+			this.team1View.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.team1View.Name = "team1View";
+			this.team1View.Size = new System.Drawing.Size(180, 413);
+			this.team1View.TabIndex = 1;
+			this.team1View.UseCompatibleStateImageBehavior = false;
+			this.team1View.View = System.Windows.Forms.View.List;
+			this.team1View.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.OnStartDrag);
+			this.team1View.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnDragDrop);
+			this.team1View.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnDragEnter);
+			// 
 			// notPlayingView
 			// 
 			this.notPlayingView.AllowDrop = true;
@@ -149,169 +305,6 @@ namespace Ranker
 			this.notPlayingView.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnDragDrop);
 			this.notPlayingView.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnDragEnter);
 			// 
-			// team1View
-			// 
-			this.team1View.AllowDrop = true;
-			this.team1View.HideSelection = false;
-			this.team1View.Location = new System.Drawing.Point(202, 37);
-			this.team1View.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.team1View.Name = "team1View";
-			this.team1View.Size = new System.Drawing.Size(180, 413);
-			this.team1View.TabIndex = 1;
-			this.team1View.UseCompatibleStateImageBehavior = false;
-			this.team1View.View = System.Windows.Forms.View.List;
-			this.team1View.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.OnStartDrag);
-			this.team1View.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnDragDrop);
-			this.team1View.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnDragEnter);
-			// 
-			// team2View
-			// 
-			this.team2View.AllowDrop = true;
-			this.team2View.HideSelection = false;
-			this.team2View.Location = new System.Drawing.Point(393, 37);
-			this.team2View.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.team2View.Name = "team2View";
-			this.team2View.Size = new System.Drawing.Size(180, 413);
-			this.team2View.TabIndex = 2;
-			this.team2View.UseCompatibleStateImageBehavior = false;
-			this.team2View.View = System.Windows.Forms.View.List;
-			this.team2View.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.OnStartDrag);
-			this.team2View.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnDragDrop);
-			this.team2View.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnDragEnter);
-			// 
-			// team2WinLabel
-			// 
-			this.team2WinLabel.Location = new System.Drawing.Point(393, 9);
-			this.team2WinLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.team2WinLabel.Name = "team2WinLabel";
-			this.team2WinLabel.Size = new System.Drawing.Size(182, 23);
-			this.team2WinLabel.TabIndex = 3;
-			this.team2WinLabel.Text = "Team 2";
-			// 
-			// team1WinLabel
-			// 
-			this.team1WinLabel.Location = new System.Drawing.Point(202, 9);
-			this.team1WinLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.team1WinLabel.Name = "team1WinLabel";
-			this.team1WinLabel.Size = new System.Drawing.Size(182, 23);
-			this.team1WinLabel.TabIndex = 4;
-			this.team1WinLabel.Text = "Team 1";
-			// 
-			// button6
-			// 
-			this.button6.Location = new System.Drawing.Point(202, 506);
-			this.button6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.button6.Name = "button6";
-			this.button6.Size = new System.Drawing.Size(372, 35);
-			this.button6.TabIndex = 5;
-			this.button6.Text = "Autobalance";
-			this.button6.UseVisualStyleBackColor = true;
-			this.button6.Click += new System.EventHandler(this.OnAutobalance);
-			// 
-			// button8
-			// 
-			this.button8.Location = new System.Drawing.Point(202, 462);
-			this.button8.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.button8.Name = "button8";
-			this.button8.Size = new System.Drawing.Size(182, 35);
-			this.button8.TabIndex = 6;
-			this.button8.Text = "Won";
-			this.button8.UseVisualStyleBackColor = true;
-			this.button8.Click += new System.EventHandler(this.OnTeam1Win);
-			// 
-			// button9
-			// 
-			this.button9.Location = new System.Drawing.Point(393, 462);
-			this.button9.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.button9.Name = "button9";
-			this.button9.Size = new System.Drawing.Size(182, 35);
-			this.button9.TabIndex = 7;
-			this.button9.Text = "Won";
-			this.button9.UseVisualStyleBackColor = true;
-			this.button9.Click += new System.EventHandler(this.OnTeam2Win);
-			// 
-			// rule1CheckBox
-			// 
-			this.rule1CheckBox.AutoSize = true;
-			this.rule1CheckBox.Checked = true;
-			this.rule1CheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.rule1CheckBox.Location = new System.Drawing.Point(202, 631);
-			this.rule1CheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.rule1CheckBox.Name = "rule1CheckBox";
-			this.rule1CheckBox.Size = new System.Drawing.Size(360, 24);
-			this.rule1CheckBox.TabIndex = 10;
-			this.rule1CheckBox.Text = "1st and 2nd players may not be on same team";
-			this.rule1CheckBox.UseVisualStyleBackColor = true;
-			// 
-			// rule2CheckBox
-			// 
-			this.rule2CheckBox.AutoSize = true;
-			this.rule2CheckBox.Location = new System.Drawing.Point(202, 551);
-			this.rule2CheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.rule2CheckBox.Name = "rule2CheckBox";
-			this.rule2CheckBox.Size = new System.Drawing.Size(110, 24);
-			this.rule2CheckBox.TabIndex = 11;
-			this.rule2CheckBox.Text = "Bias game";
-			this.rule2CheckBox.UseVisualStyleBackColor = true;
-			// 
-			// biasComboBox
-			// 
-			this.biasComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.biasComboBox.FormattingEnabled = true;
-			this.biasComboBox.Location = new System.Drawing.Point(459, 548);
-			this.biasComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.biasComboBox.Name = "biasComboBox";
-			this.biasComboBox.Size = new System.Drawing.Size(180, 28);
-			this.biasComboBox.TabIndex = 12;
-			// 
-			// inFavourRadioButton
-			// 
-			this.inFavourRadioButton.AutoSize = true;
-			this.inFavourRadioButton.Checked = true;
-			this.inFavourRadioButton.Location = new System.Drawing.Point(324, 549);
-			this.inFavourRadioButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.inFavourRadioButton.Name = "inFavourRadioButton";
-			this.inFavourRadioButton.Size = new System.Drawing.Size(112, 24);
-			this.inFavourRadioButton.TabIndex = 13;
-			this.inFavourRadioButton.TabStop = true;
-			this.inFavourRadioButton.Text = "in favour of";
-			this.inFavourRadioButton.UseVisualStyleBackColor = true;
-			// 
-			// againstRadioButton
-			// 
-			this.againstRadioButton.AutoSize = true;
-			this.againstRadioButton.Location = new System.Drawing.Point(324, 585);
-			this.againstRadioButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.againstRadioButton.Name = "againstRadioButton";
-			this.againstRadioButton.Size = new System.Drawing.Size(86, 24);
-			this.againstRadioButton.TabIndex = 14;
-			this.againstRadioButton.Text = "against";
-			this.againstRadioButton.UseVisualStyleBackColor = true;
-			// 
-			// playerBalanceCheckBox
-			// 
-			this.playerBalanceCheckBox.AutoSize = true;
-			this.playerBalanceCheckBox.Checked = true;
-			this.playerBalanceCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.playerBalanceCheckBox.Location = new System.Drawing.Point(202, 666);
-			this.playerBalanceCheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.playerBalanceCheckBox.Name = "playerBalanceCheckBox";
-			this.playerBalanceCheckBox.Size = new System.Drawing.Size(138, 24);
-			this.playerBalanceCheckBox.TabIndex = 15;
-			this.playerBalanceCheckBox.Text = "Player balance";
-			this.playerBalanceCheckBox.UseVisualStyleBackColor = true;
-			// 
-			// floorMatchCheckBox
-			// 
-			this.floorMatchCheckBox.AutoSize = true;
-			this.floorMatchCheckBox.Location = new System.Drawing.Point(202, 702);
-			this.floorMatchCheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.floorMatchCheckBox.Name = "floorMatchCheckBox";
-			this.floorMatchCheckBox.Size = new System.Drawing.Size(119, 24);
-			this.floorMatchCheckBox.TabIndex = 16;
-			this.floorMatchCheckBox.Text = "Floor match";
-			this.floorMatchCheckBox.UseVisualStyleBackColor = true;
-			// 
 			// reportsTabPage
 			// 
 			this.reportsTabPage.Controls.Add(this.webBrowser1);
@@ -326,26 +319,6 @@ namespace Ranker
 			this.reportsTabPage.Text = "Reports";
 			this.reportsTabPage.UseVisualStyleBackColor = true;
 			// 
-			// button7
-			// 
-			this.button7.Location = new System.Drawing.Point(12, 9);
-			this.button7.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.button7.Name = "button7";
-			this.button7.Size = new System.Drawing.Size(201, 35);
-			this.button7.TabIndex = 3;
-			this.button7.Text = "Rankings";
-			this.button7.UseVisualStyleBackColor = true;
-			this.button7.Click += new System.EventHandler(this.OnReportRankings);
-			// 
-			// dateTimePicker
-			// 
-			this.dateTimePicker.Location = new System.Drawing.Point(222, 14);
-			this.dateTimePicker.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.dateTimePicker.Name = "dateTimePicker";
-			this.dateTimePicker.Size = new System.Drawing.Size(298, 26);
-			this.dateTimePicker.TabIndex = 4;
-			this.dateTimePicker.ValueChanged += new System.EventHandler(this.OnStartDateChanged);
-			// 
 			// webBrowser1
 			// 
 			this.webBrowser1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -357,6 +330,26 @@ namespace Ranker
 			this.webBrowser1.Name = "webBrowser1";
 			this.webBrowser1.Size = new System.Drawing.Size(1324, 809);
 			this.webBrowser1.TabIndex = 5;
+			// 
+			// dateTimePicker
+			// 
+			this.dateTimePicker.Location = new System.Drawing.Point(222, 14);
+			this.dateTimePicker.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.dateTimePicker.Name = "dateTimePicker";
+			this.dateTimePicker.Size = new System.Drawing.Size(298, 26);
+			this.dateTimePicker.TabIndex = 4;
+			this.dateTimePicker.ValueChanged += new System.EventHandler(this.OnStartDateChanged);
+			// 
+			// button7
+			// 
+			this.button7.Location = new System.Drawing.Point(12, 9);
+			this.button7.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.button7.Name = "button7";
+			this.button7.Size = new System.Drawing.Size(201, 35);
+			this.button7.TabIndex = 3;
+			this.button7.Text = "Rankings";
+			this.button7.UseVisualStyleBackColor = true;
+			this.button7.Click += new System.EventHandler(this.OnReportRankings);
 			// 
 			// gamesTab
 			// 
@@ -376,37 +369,34 @@ namespace Ranker
 			this.gamesTab.Text = "Games";
 			this.gamesTab.UseVisualStyleBackColor = true;
 			// 
-			// gamesListBox
+			// deleteButton
 			// 
-			this.gamesListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.gamesListBox.FormattingEnabled = true;
-			this.gamesListBox.ItemHeight = 20;
-			this.gamesListBox.Location = new System.Drawing.Point(12, 49);
-			this.gamesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.gamesListBox.Name = "gamesListBox";
-			this.gamesListBox.Size = new System.Drawing.Size(300, 804);
-			this.gamesListBox.TabIndex = 0;
-			this.gamesListBox.SelectedIndexChanged += new System.EventHandler(this.OnGameSelected);
+			this.deleteButton.Location = new System.Drawing.Point(866, 42);
+			this.deleteButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.deleteButton.Name = "deleteButton";
+			this.deleteButton.Size = new System.Drawing.Size(112, 35);
+			this.deleteButton.TabIndex = 8;
+			this.deleteButton.Text = "Delete";
+			this.deleteButton.UseVisualStyleBackColor = true;
+			this.deleteButton.Click += new System.EventHandler(this.OnDeleteGame);
 			// 
-			// label1
+			// reviewTeam2Label
 			// 
-			this.label1.Location = new System.Drawing.Point(322, 49);
-			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(212, 63);
-			this.label1.TabIndex = 2;
-			this.label1.Text = "label1";
+			this.reviewTeam2Label.Location = new System.Drawing.Point(543, 112);
+			this.reviewTeam2Label.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.reviewTeam2Label.Name = "reviewTeam2Label";
+			this.reviewTeam2Label.Size = new System.Drawing.Size(160, 229);
+			this.reviewTeam2Label.TabIndex = 7;
+			this.reviewTeam2Label.Text = "reviewTeam2Label";
 			// 
-			// label2
+			// reviewTeam1Label
 			// 
-			this.label2.Location = new System.Drawing.Point(543, 49);
-			this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(314, 63);
-			this.label2.TabIndex = 3;
-			this.label2.Text = "label2";
-			this.label2.Click += new System.EventHandler(this.Label2Click);
+			this.reviewTeam1Label.Location = new System.Drawing.Point(322, 112);
+			this.reviewTeam1Label.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.reviewTeam1Label.Name = "reviewTeam1Label";
+			this.reviewTeam1Label.Size = new System.Drawing.Size(212, 229);
+			this.reviewTeam1Label.TabIndex = 6;
+			this.reviewTeam1Label.Text = "reviewTeam1Label";
 			// 
 			// gameFilterComboBox
 			// 
@@ -423,40 +413,44 @@ namespace Ranker
 			this.gameFilterComboBox.TabIndex = 4;
 			this.gameFilterComboBox.SelectedIndexChanged += new System.EventHandler(this.OnFilterSelected);
 			// 
-			// reviewTeam1Label
+			// label2
 			// 
-			this.reviewTeam1Label.Location = new System.Drawing.Point(322, 112);
-			this.reviewTeam1Label.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.reviewTeam1Label.Name = "reviewTeam1Label";
-			this.reviewTeam1Label.Size = new System.Drawing.Size(212, 229);
-			this.reviewTeam1Label.TabIndex = 6;
-			this.reviewTeam1Label.Text = "reviewTeam1Label";
+			this.label2.Location = new System.Drawing.Point(543, 49);
+			this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(314, 63);
+			this.label2.TabIndex = 3;
+			this.label2.Text = "label2";
+			this.label2.Click += new System.EventHandler(this.Label2Click);
 			// 
-			// reviewTeam2Label
+			// label1
 			// 
-			this.reviewTeam2Label.Location = new System.Drawing.Point(543, 112);
-			this.reviewTeam2Label.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.reviewTeam2Label.Name = "reviewTeam2Label";
-			this.reviewTeam2Label.Size = new System.Drawing.Size(160, 229);
-			this.reviewTeam2Label.TabIndex = 7;
-			this.reviewTeam2Label.Text = "reviewTeam2Label";
+			this.label1.Location = new System.Drawing.Point(322, 49);
+			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(212, 63);
+			this.label1.TabIndex = 2;
+			this.label1.Text = "label1";
 			// 
-			// deleteButton
+			// gamesListBox
 			// 
-			this.deleteButton.Location = new System.Drawing.Point(866, 42);
-			this.deleteButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.deleteButton.Name = "deleteButton";
-			this.deleteButton.Size = new System.Drawing.Size(112, 35);
-			this.deleteButton.TabIndex = 8;
-			this.deleteButton.Text = "Delete";
-			this.deleteButton.UseVisualStyleBackColor = true;
-			this.deleteButton.Click += new System.EventHandler(this.OnDeleteGame);
+			this.gamesListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gamesListBox.FormattingEnabled = true;
+			this.gamesListBox.ItemHeight = 20;
+			this.gamesListBox.Location = new System.Drawing.Point(12, 49);
+			this.gamesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.gamesListBox.Name = "gamesListBox";
+			this.gamesListBox.Size = new System.Drawing.Size(300, 804);
+			this.gamesListBox.TabIndex = 0;
+			this.gamesListBox.SelectedIndexChanged += new System.EventHandler(this.OnGameSelected);
 			// 
 			// tabControl1
 			// 
 			this.tabControl1.Controls.Add(this.gamesTab);
-			this.tabControl1.Controls.Add(this.reportsTabPage);
+			this.tabControl1.Controls.Add(this.playersTabPage);
 			this.tabControl1.Controls.Add(this.tabPage4);
+			this.tabControl1.Controls.Add(this.reportsTabPage);
 			this.tabControl1.Controls.Add(this.graphsPage);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -465,6 +459,48 @@ namespace Ranker
 			this.tabControl1.SelectedIndex = 0;
 			this.tabControl1.Size = new System.Drawing.Size(1360, 908);
 			this.tabControl1.TabIndex = 0;
+			// 
+			// playersTabPage
+			// 
+			this.playersTabPage.Controls.Add(this.playersGrid);
+			this.playersTabPage.Location = new System.Drawing.Point(4, 29);
+			this.playersTabPage.Name = "playersTabPage";
+			this.playersTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.playersTabPage.Size = new System.Drawing.Size(1352, 875);
+			this.playersTabPage.TabIndex = 7;
+			this.playersTabPage.Text = "Players";
+			this.playersTabPage.UseVisualStyleBackColor = true;
+			// 
+			// playersGrid
+			// 
+			this.playersGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.playersGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.playersGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.namePlayerColumn,
+            this.initialRankPlayerColumn});
+			this.playersGrid.Location = new System.Drawing.Point(6, 6);
+			this.playersGrid.Name = "playersGrid";
+			this.playersGrid.RowHeadersWidth = 62;
+			this.playersGrid.RowTemplate.Height = 28;
+			this.playersGrid.Size = new System.Drawing.Size(1343, 861);
+			this.playersGrid.TabIndex = 0;
+			this.playersGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnPlayerCellEndEdit);
+			// 
+			// namePlayerColumn
+			// 
+			this.namePlayerColumn.HeaderText = "Name";
+			this.namePlayerColumn.MinimumWidth = 8;
+			this.namePlayerColumn.Name = "namePlayerColumn";
+			this.namePlayerColumn.Width = 150;
+			// 
+			// initialRankPlayerColumn
+			// 
+			this.initialRankPlayerColumn.HeaderText = "Initial Rank";
+			this.initialRankPlayerColumn.MinimumWidth = 8;
+			this.initialRankPlayerColumn.Name = "initialRankPlayerColumn";
+			this.initialRankPlayerColumn.Width = 150;
 			// 
 			// MainForm
 			// 
@@ -483,6 +519,8 @@ namespace Ranker
 			this.reportsTabPage.ResumeLayout(false);
 			this.gamesTab.ResumeLayout(false);
 			this.tabControl1.ResumeLayout(false);
+			this.playersTabPage.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.playersGrid)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -491,7 +529,6 @@ namespace Ranker
 		private System.Windows.Forms.ComboBox graphComboBox;
 		private System.Windows.Forms.DataVisualization.Charting.Chart chart;
 		private System.Windows.Forms.TabPage tabPage4;
-		private System.Windows.Forms.CheckBox floorMatchCheckBox;
 		private System.Windows.Forms.CheckBox playerBalanceCheckBox;
 		private System.Windows.Forms.RadioButton againstRadioButton;
 		private System.Windows.Forms.RadioButton inFavourRadioButton;
@@ -519,5 +556,9 @@ namespace Ranker
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox gamesListBox;
 		private System.Windows.Forms.TabControl tabControl1;
+		private System.Windows.Forms.TabPage playersTabPage;
+		private System.Windows.Forms.DataGridView playersGrid;
+		private System.Windows.Forms.DataGridViewTextBoxColumn namePlayerColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn initialRankPlayerColumn;
 	}
 }

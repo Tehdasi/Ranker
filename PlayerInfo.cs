@@ -11,7 +11,6 @@ namespace Ranker
 		public double score;
 		public int games;
 		public int wins;
-        public int floor;
 		public Dictionary<string, int> onSide;
 		public bool real;
 		public DateTime lastActivity;

@@ -57,7 +57,6 @@ namespace Ranker
 				pi.score = pe.initialRank;
 				pi.games = 0;
 				pi.name = pe.name;
-				pi.floor = pe.floor;
 				pi.real = true;
 				pi.active = false;
 				pi.onSide = new Dictionary<string, int>();

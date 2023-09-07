@@ -100,7 +100,6 @@ namespace Ranker
 					pi.score = 1500;
 					pi.games = 0;
 					pi.name = "EmptyLane" + i;
-					pi.floor = 0;
 					pi.real = false;
 					pi.active = true;
 					pi.onSide= new Dictionary<string,int>();

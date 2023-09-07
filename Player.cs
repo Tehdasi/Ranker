@@ -10,6 +10,7 @@ namespace Ranker
 		public long id;
 		public string realname;
 		public long side;
+		public long initialRank;
         public bool fake;
 
 		public object Clone()
