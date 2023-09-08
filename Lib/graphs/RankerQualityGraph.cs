@@ -50,6 +50,8 @@ namespace Ranker.graphs
 				ser.Points.Add(dp);
 			}
 			chart.Series.Add(ser);
+			chart.ChartAreas[0].AxisX.Minimum = 0;
+			chart.ChartAreas[0].AxisX.Maximum = 1;
 		}
 
 		public override string Title() 

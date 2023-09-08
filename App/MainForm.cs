@@ -31,15 +31,9 @@ namespace Ranker
 			chart.ChartAreas.Add(new ChartArea());
 			chart.Legends.Add(new Legend());
 
-			graphs = new List<Graph>();
-			foreach (Type t in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(Graph))))
-			{
-				Graph? g = Activator.CreateInstance(t) as Graph;
-				Debug.Assert(g != null);
-
-				graphs.Add(g);
+			graphs = Graph.GetAllGraphs();
+			foreach( var g in graphs )
 				graphComboBox.Items.Add(g.Title());
-			}
 
 			rankingAlgo = model.DefaultRankingAlgo();
 		}

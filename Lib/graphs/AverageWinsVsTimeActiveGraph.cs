@@ -55,9 +55,11 @@ namespace Ranker.graphs
 
 				chart.Series.Add(ser);
 			}
-
+			chart.ChartAreas[0].AxisY.Minimum = 0;
 			chart.ChartAreas[0].AxisX.Title = "Games";
 			chart.ChartAreas[0].AxisY.Title = "Average wins (1 win, 0 loss, 50 samples)";
+			chart.ChartAreas[0].AxisX.Minimum = 0;
+			chart.ChartAreas[0].AxisX.Maximum = ec.gameInfo.Count;
 		}
 	}
 }

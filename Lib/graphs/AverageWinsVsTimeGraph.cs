@@ -29,9 +29,6 @@ namespace Ranker.graphs
 
 			foreach (string p in ec.playerInfo.Keys)
 			{
-				//				if ((p.ToLower() != "tim") && (p.ToLower() != "michael"))
-				//					continue;
-
 				PlayerInfo pi = ec.playerInfo[p];
 
 				Averager avg = new Averager(30);
@@ -59,6 +56,8 @@ namespace Ranker.graphs
 
 			chart.ChartAreas[0].AxisX.Title = "Games";
 			chart.ChartAreas[0].AxisY.Title = "Average wins (1 win, 0 loss, 30 samples)";
+			chart.ChartAreas[0].AxisX.Minimum = 0;
+			chart.ChartAreas[0].AxisX.Maximum = ec.gameInfo.Count;
 		}
 	}
 }
