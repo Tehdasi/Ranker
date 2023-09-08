@@ -663,12 +663,15 @@ namespace Ranker
             for (int i = 0; i < team2View.Items.Count; i++)
                 team2.Insert(0, allPlayersInfo[team2View.Items[i].Text]);
 
-            if (team1View.Items.Count != team2View.Items.Count)
+            // make teams even if they are not balanced, by inserting empty lanes
+            if (team1View.Items.Count != team2View.Items.Count && team1View.Items.Count >= 1 && team2View.Items.Count >= 1 )
             {
                 if (team1View.Items.Count < team2View.Items.Count)
-                    team1.Add(allPlayersInfo["EmptyLane" + (team1View.Items.Count + 1)]);
+                    team1.Add(allPlayersInfo[$"EmptyLane{(team1View.Items.Count + 1)}"]);
                 else
-                    team2.Add(allPlayersInfo["EmptyLane" + (team2View.Items.Count + 1)]);
+                {
+                    team2.Add(allPlayersInfo[$"EmptyLane{(team2View.Items.Count + 1)}"]);
+                }
             }
 
             double pc = model.DefaultRankingAlgo().PercentageChance(team1, team2);
@@ -773,13 +776,12 @@ namespace Ranker
                 }
             }
 
+            // get the two best players
             {
-                SortedDictionary<double, PlayerInfo> playersByElo = new SortedDictionary<double, PlayerInfo>();
-                foreach (PlayerInfo pi in playersInfo.Values)
-                    playersByElo.Add(pi.score, pi);
+                var sorted= playersInfo.OrderBy( p=> p.Value.score ).ToList();
 
-                bestPlayers.Add(playersByElo.Values.ElementAt(playersByElo.Count - 1));
-                bestPlayers.Add(playersByElo.Values.ElementAt(playersByElo.Count - 2));
+                bestPlayers.Add(sorted.ElementAt(sorted.Count - 1).Value);
+                bestPlayers.Add(sorted.ElementAt(sorted.Count - 2).Value);
             }
 
             int bestCombo = -1;

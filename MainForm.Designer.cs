@@ -202,9 +202,9 @@ namespace Ranker
 			this.rule1CheckBox.Location = new System.Drawing.Point(202, 631);
 			this.rule1CheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.rule1CheckBox.Name = "rule1CheckBox";
-			this.rule1CheckBox.Size = new System.Drawing.Size(360, 24);
+			this.rule1CheckBox.Size = new System.Drawing.Size(341, 24);
 			this.rule1CheckBox.TabIndex = 10;
-			this.rule1CheckBox.Text = "1st and 2nd players may not be on same team";
+			this.rule1CheckBox.Text = "1st and 2nd best players on different teams";
 			this.rule1CheckBox.UseVisualStyleBackColor = true;
 			// 
 			// button9
