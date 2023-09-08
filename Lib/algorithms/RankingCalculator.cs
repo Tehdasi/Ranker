@@ -21,6 +21,10 @@ namespace Ranker
 		public RankingCalculator()
 		{
 			gamesByTime = new List<Game>();
+			playerInfo = new Dictionary<string, PlayerInfo>();
+			gameInfo = new List<GameInfo>();
+			playerEvents= new List<PlayerEvent>();
+
 			verbose = false;
 			useFakePlayers = false;
 		}
@@ -43,7 +47,7 @@ namespace Ranker
 
 		public virtual GameInfo RunGame(Game g)
 		{
-			return new GameInfo();
+			return new GameInfo(g);
 		}
 
 		public void RetireOldPlayers( DateTime fromDate )
@@ -87,8 +91,6 @@ namespace Ranker
 		{
 			gamesByTime = gamesByTime.OrderBy(item => item.datetime).ToList();
 
-			playerInfo = new Dictionary<string, PlayerInfo>();
-			gameInfo = new List<GameInfo>();
 
 			foreach (PlayerEvent pe in playerEvents)
 				RunPlayerEvent(pe);
@@ -102,7 +104,6 @@ namespace Ranker
 					pi.name = "EmptyLane" + i;
 					pi.real = false;
 					pi.active = true;
-					pi.onSide= new Dictionary<string,int>();
 					playerInfo.Add(pi.name, pi);
 				}
 

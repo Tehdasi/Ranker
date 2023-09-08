@@ -21,8 +21,7 @@ namespace Ranker
 			// see https://aka.ms/applicationconfiguration.
 			ApplicationConfiguration.Initialize();
 
-			MainForm mf = new MainForm();
-			mf.model = m;
+			MainForm mf = new MainForm( m );
 
 
 			Application.Run(mf);

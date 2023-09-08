@@ -57,7 +57,7 @@ namespace Ranker
 			return ng;
 		}
 
-        public Player GetPlayerByRealName(string name)
+        public Player? GetPlayerByRealName(string name)
         {
             foreach (Player p in players)
                 if (p.realname == name)

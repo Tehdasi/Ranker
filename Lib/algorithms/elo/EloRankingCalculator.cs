@@ -51,26 +51,17 @@ namespace Ranker
 
 		protected override void RunPlayerEvent(PlayerEvent pe)
 		{
-			//if (pe.add)
-			//{
-				PlayerInfo pi = new PlayerInfo();
-				pi.score = pe.initialRank;
-				pi.games = 0;
-				pi.name = pe.name;
-				pi.real = true;
-				pi.active = false;
-				pi.onSide = new Dictionary<string, int>();
+			PlayerInfo pi = new PlayerInfo();
+			pi.score = pe.initialRank;
+			pi.games = 0;
+			pi.name = pe.name;
+			pi.real = true;
+			pi.active = false;
 
-				SpreadPoints( 1500 - pe.initialRank );
+			SpreadPoints( 1500 - pe.initialRank );
 
-				playerInfo.Add(pe.name, pi);
-				pi.lastActivity = new DateTime(3000,1,1);
-			//}
-			//else
-			//{
-			//	RetirePlayer(playerInfo[pe.name]);
-			//}
-
+			playerInfo.Add(pe.name, pi);
+			pi.lastActivity = new DateTime(3000,1,1);
 		}
 
 		public override GameInfo RunGame(Game g)
@@ -82,16 +73,8 @@ namespace Ranker
 			double[] etelo = new double[2];
 			double[] delta = new double[2];
 
-			if (EloRankingAlgorithm.arithmeticMean)
-			{
-				telo[0] = 0;
-				telo[1] = 0;
-			}
-			else
-			{
-				telo[0] = 1;
-				telo[1] = 1;
-			}
+			telo[0] = 0;
+			telo[1] = 0;
 
 			ts[0] = 0;
 			ts[1] = 0;
@@ -106,10 +89,7 @@ namespace Ranker
 
 				Debug.WriteLineIf(verbose, "Player: " + p.realname + " elo: " + elo + " side: " + p.side);
 
-				if (EloRankingAlgorithm.arithmeticMean)
-					telo[p.side] += elo;
-				else
-					telo[p.side] *= elo;
+				telo[p.side] += elo;
 
 				ts[p.side]++;
 
@@ -130,25 +110,8 @@ namespace Ranker
 			double maxSize = Math.Max(ts[0], ts[1]);
 			double ad = 0.5;
 
-			if (EloRankingAlgorithm.arithmeticMean)
-			{
-				telo[0] *= (maxSize + ad) / (ts[0] + ad);
-				telo[1] *= (maxSize + ad) / (ts[1] + ad);
-			}
-			else
-			{
-				for (int i = 0; i < 2; i++)
-				{
-					int fs = ts[i];
-					while (fs < maxSize)
-					{
-						fs++;
-						telo[i] *= fillerPlayerElo;
-					}
-
-					telo[i] = Math.Pow(telo[i], 1.0 / fs);
-				}
-			}
+			telo[0] *= (maxSize + ad) / (ts[0] + ad);
+			telo[1] *= (maxSize + ad) / (ts[1] + ad);
 
 			Debug.WriteLineIf(verbose, "Adjusting due to uneven teams.");
 			Debug.WriteLineIf(verbose, "Team 0 total elo: " + telo[0]);
@@ -185,8 +148,7 @@ namespace Ranker
 			//Debug.WriteLine("scourge delta: " + delta[1]);
 			//				Debug.WriteLine(avg.Average());
 
-			GameInfo gi = new GameInfo();
-			gi.game = g;
+			GameInfo gi = new GameInfo(g);
 			gi.sentinelPoints = delta[0];
 			gi.scourgePoints = delta[1];
 			gi.winChanceSentinel = etelo[0];

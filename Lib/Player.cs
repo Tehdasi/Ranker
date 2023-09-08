@@ -8,7 +8,7 @@ namespace Ranker
 	public class Player : ICloneable
 	{
 		public long id;
-		public string realname;
+		public string realname= "";
 		public long side;
 		public long initialRank;
         public bool fake;

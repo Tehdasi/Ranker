@@ -8,11 +8,19 @@ namespace Ranker
 	public class GameInfo
     { 
 		public Game game;
+
         // scores by player
 		public Dictionary<string, double> preGameScore, postGameScore;
 		public double sentinelPoints, scourgePoints;
 		public double winChanceSentinel, winChanceScourge;
 		public bool sentinelWin;
+
+        public GameInfo( Game game)
+        {
+            this.game = game;
+            preGameScore = new Dictionary<string, double>();
+            postGameScore= new Dictionary<string, double>();
+        }
 
         public double WinPoints()
         {

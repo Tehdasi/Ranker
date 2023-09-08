@@ -8,8 +8,6 @@ namespace Ranker
 {
 	class EloRankingAlgorithm : RankingAlgorithm
 	{
-		public const bool arithmeticMean = true;
-
 		public RankingCalculator GetCalculator()
 		{
 			return new EloRankingCalculator();
@@ -17,15 +15,10 @@ namespace Ranker
 
 		double EloForTeam( List<PlayerInfo> team )
 		{
-			double elo= arithmeticMean ? 0 : 1;
+			double elo= 0;
 
 			foreach( PlayerInfo pi in team )
-			{
-				if( arithmeticMean )
-					elo+= pi.score; 
-				else
-					elo*= pi.score;
-			}
+				elo+= pi.score; 
 
 			return elo;
 		}

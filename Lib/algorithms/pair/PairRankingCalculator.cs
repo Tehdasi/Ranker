@@ -54,7 +54,6 @@ namespace Ranker
 				pi.games = 0;
 				pi.name = pe.name;
 				pi.real = true;
-				pi.onSide = new Dictionary<string, int>();
 				playerInfo.Add(pe.name, pi);
 
 			}
@@ -83,8 +82,7 @@ namespace Ranker
 
 		public override GameInfo RunGame(Game g)
 		{
-			GameInfo gi = new GameInfo();
-			gi.game = g;
+			GameInfo gi = new GameInfo(g);
 			gi.winChanceSentinel = 0;
 			gi.winChanceScourge = 0;
 			gi.preGameScore = new Dictionary<string, double>();

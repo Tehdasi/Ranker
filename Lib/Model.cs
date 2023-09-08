@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.SQLite;
-using System.Windows.Forms;
-using System.IO;
-using System.Diagnostics;
-using System.Reflection;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+﻿using System.Data.SQLite;
 
 namespace Ranker
 {
@@ -22,12 +13,28 @@ namespace Ranker
 
 		public const int retirementDays = 50;
 
+
+		public Model()
+		{
+			games= new List<Game>();
+			playerEvents = new List<PlayerEvent>();
+			players = new List<Player>();
+
+			algos = new List<RankingAlgorithm>();
+
+			algos.Add(new EloRankingAlgorithm());
+			algos.Add(new PairRankingAlgorithm());
+
+			defaultRankingAlgo = algos[0];
+
+			dbConnection = new SQLiteConnection();
+		}
+
 		public void Start()
 		{
 			const string dbPath = "ranker.sqlite";
 
-			games = new List<Game>();
-			dbConnection = new SQLiteConnection($"data source={dbPath};");
+			dbConnection.ConnectionString= $"data source={dbPath};";
 			dbConnection.Open();
 
 
@@ -55,12 +62,7 @@ namespace Ranker
 						name TEXT  NULL );");
 			}
 
-			algos = new List<RankingAlgorithm>();
 
-			algos.Add(new EloRankingAlgorithm());
-			algos.Add(new PairRankingAlgorithm());
-
-			defaultRankingAlgo = algos[0];
 		}
 
 		public bool IsRealPlayer( string name )
@@ -184,8 +186,7 @@ namespace Ranker
 				//Debug.WriteLine("scourge delta: " + delta[1]);
 //				Debug.WriteLine(avg.Average());
 
-				GameInfo gi = new GameInfo();
-				gi.game = g;
+				GameInfo gi = new GameInfo( g );
 				gi.sentinelPoints = delta[0];
 				gi.scourgePoints = delta[1];
 				gi.winChanceSentinel = etelo[0];
@@ -212,8 +213,8 @@ namespace Ranker
 
 		public void LoadPlayerEvents()
 		{
-			playerEvents = new List<PlayerEvent>();
-			players = new List<Player>();
+			playerEvents.Clear();
+			players.Clear();
 
 			SQLiteCommand comm = new SQLiteCommand("select id, date, initialRank, name from playerEvent order by date", dbConnection);
 			SQLiteDataReader reader = comm.ExecuteReader();
@@ -263,7 +264,7 @@ namespace Ranker
 
 		public void UpdatePlayer(string name, int initialRank)
 		{
-			Player p = players.Find( x=> x.realname== name );
+			Player? p = players.Find( x=> x.realname== name );
 
 			if (p == null)
 			{
@@ -488,7 +489,7 @@ namespace Ranker
 				return defaultValue;
 		}
 
-		public void DbNonQuery(SQLiteTransaction trans, string sql)
+		public void DbNonQuery(SQLiteTransaction? trans, string sql)
 		{
 			SQLiteCommand command = new SQLiteCommand(sql, dbConnection, trans);
 			command.ExecuteNonQuery();
