@@ -1,26 +1,25 @@
-﻿using System;
-using System.Windows.Forms;
-using System.IO;
-using System.Diagnostics;
+using System.Reflection;
 
 namespace Ranker
 {
-	internal sealed class Program
+	internal static class Program
 	{
+		/// <summary>
+		///  The main entry point for the application.
+		/// </summary>
 		[STAThread]
-		private static void Main(string[] args)
+		static void Main()
 		{
 			Model m = new Model();
 
 			m.Start();
 
 			m.LoadPlayerEvents();
-//            m.HackyThing();
 			m.RestoreGames();
 
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-
+			// To customize application configuration such as set high DPI settings or default font,
+			// see https://aka.ms/applicationconfiguration.
+			ApplicationConfiguration.Initialize();
 
 			MainForm mf = new MainForm();
 			mf.model = m;
@@ -29,8 +28,6 @@ namespace Ranker
 			Application.Run(mf);
 
 			m.End();
-
 		}
-		
 	}
 }
