@@ -102,114 +102,6 @@ namespace Ranker
 			DbNonQuery(null, "insert or replace into namelookup (name, player) values ('" + SQLString(name) + "','" + SQLString(player) + "');");
 		}
 
-		Dictionary<string,PlayerInfo> EloFromGames( SortedList<DateTime,Game> games, List<GameInfo> gameInfos, bool squaredSkill )
-		{
-			int plrEvent = 0;
-
-			Averager avg = new Averager(10);
-			int usedGames = 0;
-			Dictionary<string, PlayerInfo> playerInfo = new Dictionary<string, PlayerInfo>();
-
-			foreach (Game g in games.Values)
-			{
-
-				while ((plrEvent < (playerEvents.Count - 1)) && playerEvents[plrEvent].date < g.datetime)
-				{
-					PlayerEvent pe = playerEvents[plrEvent];
-
-					if (pe.add)
-					{
-						PlayerInfo pi = new PlayerInfo();
-						pi.score = pe.initialRank;
-						pi.games = 0;
-						pi.name = pe.name;
-						playerInfo.Add(pe.name, pi);
-					}
-					else
-						playerInfo.Remove(pe.name);
-
-					plrEvent++;
-				}
-
-				double[] telo = new double[2];
-				double[] ts = new double[2];
-				double[] etelo = new double[2];
-				double[] delta = new double[2];
-
-				telo[0] = 0;
-				telo[1] = 0;
-				ts[0] = 0;
-				ts[1] = 0;
-
-				foreach (Player p in g.players)
-				{
-					double elo = playerInfo[p.realname].score;
-					if (squaredSkill)
-						telo[p.side] += elo * elo;
-					else
-						telo[p.side] += elo;
-
-					ts[p.side]++;
-
-					playerInfo[p.realname].games++;
-				}
-
-				double maxSize = Math.Max(ts[0], ts[1]);
-				double ad= 0.5;
-
-				telo[0] *= (maxSize + ad) / (ts[0] + ad);
-				telo[1] *= (maxSize + ad) / (ts[1] + ad);
-
-				etelo[0] = 1.0 / (1 + Math.Pow(10, (telo[1] - telo[0]) / 400.0));
-				etelo[1] = 1.0 / (1 + Math.Pow(10, (telo[0] - telo[1]) / 400.0));
-
-
-				delta[0] = 32 * (((g.WinSide() == 0) ? 1 : 0) - etelo[0]) * ts[1] / maxSize;
-				delta[1] = 32 * (((g.WinSide() == 1) ? 1 : 0) - etelo[1]) * ts[0] / maxSize;
-
-
-				avg.Add( Math.Abs(((g.WinSide() == 0) ? 1 : 0) - etelo[0]) );
-
-				usedGames++;
-
-//				Debug.WriteLine("");
-//				Debug.WriteLine(g.filename);
-//				Debug.WriteLine(etelo[0]);
-
-				//foreach (Player p in g.players)
-				//    Debug.WriteLine(SideName((int)p.side) + ", " + p.name + ", " + p.realname + ", " + playerInfo[p.realname].elo );
-
-				//Debug.WriteLine("team elo: " + telo[0] + "," + telo[1]);
-				//Debug.WriteLine("win chance: " + etelo[0] + "," + etelo[1]);
-				//Debug.WriteLine(SideName(g.WinSide()) + " wins!");
-				//Debug.WriteLine("sentinel delta: " + delta[0]);
-				//Debug.WriteLine("scourge delta: " + delta[1]);
-//				Debug.WriteLine(avg.Average());
-
-				GameInfo gi = new GameInfo( g );
-				gi.sentinelPoints = delta[0];
-				gi.scourgePoints = delta[1];
-				gi.winChanceSentinel = etelo[0];
-				gi.winChanceScourge = etelo[1];
-				gi.preGameScore = new Dictionary<string, double>();
-				gi.postGameScore = new Dictionary<string, double>();
-
-
-				foreach (Player p in g.players)
-					gi.preGameScore.Add(p.realname, playerInfo[p.realname].score);
-
-				foreach (Player p in g.players)
-					playerInfo[p.realname].score += delta[p.side];
-
-				foreach (Player p in g.players)
-				gi.postGameScore.Add(p.realname, playerInfo[p.realname].score);
-
-				if( gameInfos!= null )
-					gameInfos.Add(gi);
-			}
-
-			return playerInfo;
-		}
 
 		public void LoadPlayerEvents()
 		{
@@ -279,6 +171,14 @@ namespace Ranker
 			p.initialRank = initialRank;
 
 			DbNonQuery(null, $"insert into playerevent (date,initialRank,name) values (datetime('now','localtime'),{p.initialRank},'{p.realname}')");
+
+			{
+				PlayerEvent pe = new PlayerEvent();
+				pe.date= DateTime.Now;
+				pe.name = name;
+				pe.initialRank = initialRank;
+				playerEvents.Add(pe);
+			}
 		}
 
 		public List<string> ActivePlayers(DateTime date)
@@ -305,19 +205,6 @@ namespace Ranker
 			return ap;
 		}
 
-
-		public Dictionary<string, PlayerInfo> GenOldElos( DateTime endPeriod )
-		{
-			RankingCalculator ec = new RankingCalculator();
-
-			foreach (Game g in games)
-				if (g.IsRanked() && (g.datetime <= endPeriod) )
-					ec.AddGame(g);
-
-			ec.SetPlayerEvents(playerEvents);
-
-			return ec.Calc();
-		}
 
 		string SQLString(string s)
 		{

@@ -17,8 +17,7 @@ namespace Ranker.graphs
 			ec.SetPlayerEvents( model.playerEvents );
 
 			foreach (Game g in model.games)
-				if (g.IsRanked())
-					ec.AddGame(g);
+				ec.AddGame(g);
 
 			ec.Calc();
 

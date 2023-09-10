@@ -123,13 +123,13 @@ namespace Ranker
 
 			if (gameInflationAdjust)
 			{
-				delta[0] = eloK * (((g.WinSide() == 0) ? 1 : 0) - etelo[0]) * ts[1] / maxSize;
-				delta[1] = eloK * (((g.WinSide() == 1) ? 1 : 0) - etelo[1]) * ts[0] / maxSize;
+				delta[0] = eloK * (((g.winSide == 0) ? 1 : 0) - etelo[0]) * ts[1] / maxSize;
+				delta[1] = eloK * (((g.winSide == 1) ? 1 : 0) - etelo[1]) * ts[0] / maxSize;
 			}
 			else
 			{
-				delta[0] = eloK * (((g.WinSide() == 0) ? 1 : 0) - etelo[0]);
-				delta[1] = eloK * (((g.WinSide() == 1) ? 1 : 0) - etelo[1]);
+				delta[0] = eloK * (((g.winSide == 0) ? 1 : 0) - etelo[0]);
+				delta[1] = eloK * (((g.winSide == 1) ? 1 : 0) - etelo[1]);
 			}
 
 			GameInfo gi = new GameInfo(g);
@@ -139,7 +139,7 @@ namespace Ranker
 			gi.winChanceScourge = etelo[1];
 			gi.preGameScore = new Dictionary<string, double>();
 			gi.postGameScore = new Dictionary<string, double>();
-			gi.sentinelWin = (g.WinSide() == 0);
+			gi.sentinelWin = (g.winSide == 0);
 
 			foreach (Player p in g.players)
 				gi.preGameScore.Add(p.realname, playerInfo[p.realname].score);

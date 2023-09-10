@@ -87,7 +87,7 @@ namespace Ranker
 			gi.winChanceScourge = 0;
 			gi.preGameScore = new Dictionary<string, double>();
 			gi.postGameScore = new Dictionary<string, double>();
-			gi.sentinelWin = (g.WinSide() == 0);
+			gi.sentinelWin = (g.winSide == 0);
 
 			List<PairPlayerData> listPairPlayerDataWinners = new List<PairPlayerData>();
 			List<PairPlayerData> listPairPlayerDataLossers = new List<PairPlayerData>();
@@ -96,7 +96,7 @@ namespace Ranker
 			{
 				PairPlayerData playerData = GetPairPlayerData(in_player);
 
-				if( g.WinSide() == in_player.side )
+				if( g.winSide == in_player.side )
 					listPairPlayerDataWinners.Add( playerData );
 				else
 					listPairPlayerDataLossers.Add(playerData);
@@ -145,8 +145,8 @@ namespace Ranker
 				);
 			winReward = (winReward * 0.5) / listPairPlayerDataWinners.Count;
 			lossPenalty= (lossPenalty* 0.5) / listPairPlayerDataLossers.Count;
-			gi.sentinelPoints = (g.WinSide() == 0 ? winReward : lossPenalty);
-			gi.scourgePoints = (g.WinSide() == 1 ? winReward : lossPenalty);
+			gi.sentinelPoints = (g.winSide == 0 ? winReward : lossPenalty);
+			gi.scourgePoints = (g.winSide == 1 ? winReward : lossPenalty);
 
 			return gi;
 		}

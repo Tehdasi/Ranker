@@ -24,7 +24,7 @@ namespace Ranker
             foreach (Player p in players)
             {
                 if (p.realname == playerName)
-                    return p.side == WinSide();
+                    return p.side == winSide;
             }
 
             return false;
@@ -93,53 +93,5 @@ namespace Ranker
 				players.Add(fp);
 			}
 		}
-
-		public bool IsRanked()
-		{
-
-			foreach (Player p in players)
-			{
-				if (p.realname == "")
-					return false;
-			}
-
-
-			if (WinSide() == -1)
-				return false;
-
-			{
-				int s1 = 0, s2 = 0;
-				foreach (Player p in players)
-					if (p.side == 0) s1++; else s2++;
-
-				if (((s1 == 1) && (s2 == 5)) ||
-					((s2 == 1) && (s1 == 5))) return false;
-			}
-
-			if (players.Count == 2)
-				return false;
-
-			return true;
-		}
-
-		public int WinSide()
-		{
-			switch (winSide)
-			{
-				case 0:
-					return -1; // can't be determined
-				case 1:
-				case -1:
-				case -3:
-					return 0;
-				case 2:
-				case -2:
-				case -4:
-					return 1;
-			}
-
-			return -1;
-		}
-
 	}
 }

@@ -32,7 +32,7 @@ namespace Ranker
 			chart.Legends.Add(new Legend());
 
 			graphs = Graph.GetAllGraphs();
-			foreach( var g in graphs )
+			foreach (var g in graphs)
 				graphComboBox.Items.Add(g.Title());
 
 			rankingAlgo = model.DefaultRankingAlgo();
@@ -54,9 +54,14 @@ namespace Ranker
 				gamesListBox.SelectedIndex = 0;
 		}
 
-		void OnLoad(object sender, EventArgs e)
+		void RefreshOrganisePlayers()
 		{
-			List<string> ap = model.ActivePlayers(DateTime.Today);
+			biasComboBox.Items.Clear();
+			notPlayingView.Items.Clear();
+			team1View.Items.Clear();
+			team2View.Items.Clear();
+
+			List<string> ap = model.ActivePlayers(DateTime.Now);
 			foreach (string s in ap)
 			{
 				biasComboBox.Items.Add(s);
@@ -65,10 +70,13 @@ namespace Ranker
 			}
 
 			biasComboBox.SelectedIndex = 0;
+		}
+
+		void OnLoad(object sender, EventArgs e)
+		{
+			RefreshOrganisePlayers();
 
 			RefreshGamesList();
-
-
 			RefreshPlayerGrid();
 		}
 
@@ -99,7 +107,7 @@ namespace Ranker
 			{
 				label1.Text =
 					$"#{currentGame.id}\r\n" +
-					$"Winner: {model.SideName(currentGame.WinSide())}\r\n";
+					$"Winner: {model.SideName(currentGame.winSide)}\r\n";
 				label2.Text = $"\r\nDate: {currentGame.datetime}";
 			}
 		}
@@ -149,8 +157,7 @@ namespace Ranker
 			RankingCalculator ec = model.GetCalculator();
 
 			foreach (Game g in model.games)
-				if (g.IsRanked())
-					ec.AddGame(g);
+				ec.AddGame(g);
 
 			ec.Calc();
 
@@ -164,7 +171,7 @@ namespace Ranker
 			ec = model.GetCalculator();
 
 			foreach (Game g in model.games)
-				if (g.IsRanked() && g.datetime < rankingPeriodStart)
+				if (g.datetime < rankingPeriodStart)
 					ec.AddGame(g);
 
 			ec.Calc();
@@ -184,6 +191,7 @@ namespace Ranker
 				{
 					double usedElo = pi.score;
 
+					// hacky as
 					while (nameByElo.ContainsKey(usedElo))
 						usedElo += 0.00000001;
 
@@ -210,12 +218,12 @@ namespace Ranker
 			sw.WriteLine("<HEAD>");
 			sw.WriteLine("<STYLE> td  { font-family:arial; font-size:10pt } ");
 			sw.WriteLine("th  { font-family:arial; font-size:12pt }");
-			sw.WriteLine("table.main { border-collapse:collapse; width: 500px;text-align:center; }");
+			sw.WriteLine("table.main { border-collapse:collapse; width: 700px;text-align:center; }");
 			sw.WriteLine("   caption { caption-side:bottom;font-weight:bold;font-style:italic;margin:4px;}");
 			sw.WriteLine("table.main,table.main th, table.main td { border: 1px solid gray; } ");
 			sw.WriteLine("table.main th, table.main td { height: 20px;padding: 4px;vertical-align:middle;} ");
 
-			sw.WriteLine(" table.game {border-collapse:collapse; width:500px;text-align:center;} " +
+			sw.WriteLine(" table.game {border-collapse:collapse; width:700px;text-align:center;} " +
 				"table.game td { border: 1px solid gray; }");
 			sw.WriteLine("</style>");
 			sw.WriteLine("</HEAD>");
@@ -295,23 +303,16 @@ namespace Ranker
 						sw.WriteLine("<p><table class=game>");
 
 						sw.WriteLine("<tr><td colspan=3> #" + gi.game.id + " " + gi.game.datetime + "</td></tr>");
-						//sw.WriteLine((gi.winChanceSentinel >= gi.winChanceScourge ? "Sentinel" : "Scourge") + " favoured to win at " +
-						//	 (Math.Max(gi.winChanceSentinel, gi.winChanceScourge).ToString("0.0%")) + "<BR>");
-
-						//						sw.WriteLine("Sentinel: " + gi.sentinelPoints + "<BR>");
 						sw.WriteLine("<tr>");
-						sw.WriteLine("<td width=200px> Winners: <br><br>");
+						sw.WriteLine("<td width=300px> Winners: <br><br>");
 						int winSide = (gi.sentinelWin ? 0 : 1);
 
 						DumpTeam(gi.sentinelWin ? 0 : 1, gi.game, sw);
 						sw.WriteLine("<br>" + gi.WinChance().ToString("0.0%") + " " + gi.WinPoints().ToString("+#.00") + "Pts");
-						//						sw.WriteLine();
 						sw.WriteLine("<td width=100px>");
 						sw.WriteLine("vs.");
-						sw.WriteLine("<td width=200px>Losers: <br><br>");
-						//						sw.WriteLine("Scourge: " + gi.scourgePoints + "<BR>");
+						sw.WriteLine("<td width=300px>Losers: <br><br>");
 						DumpTeam(gi.sentinelWin ? 1 : 0, gi.game, sw);
-						//						sw.WriteLine("</table></p>");
 
 						sw.WriteLine("<br>" + gi.LoseChance().ToString("0.0%") + " " + gi.LosePoints().ToString("#.00") + "Pts");
 						sw.WriteLine("</tr >");
@@ -388,7 +389,6 @@ namespace Ranker
 
 		private void OnReportRankings(object sender, EventArgs e)
 		{
-			//textBox.Text= "Rankings: \r\n";
 			ReportRankingsInternal(true);
 		}
 
@@ -410,53 +410,51 @@ namespace Ranker
 
 			int gp = 0, gw = 0;
 			foreach (Game g in model.games)
-				if (g.IsRanked())
+			{
+				ec.AddGame(g);
+
 				{
-					ec.AddGame(g);
-
-					{
-						int s1 = 0, s2 = 0;
-						foreach (Player p in g.players)
-						{
-							if (p.side == 0) s1++; else s2++;
-						}
-
-						if (s1 != s2)
-						{
-							gp++;
-							if (((s1 > s2) == (g.winSide == 1)))
-							{
-								gw++;
-								avg.Add(1);
-							}
-							else
-							{
-								avg.Add(0);
-							}
-							//							Debug.WriteLine(" bias " + avg.Average());
-
-						}
-					}
-
-					// total up how many times players have been on the same side as other playerss
+					int s1 = 0, s2 = 0;
 					foreach (Player p in g.players)
 					{
-						if (!onSide.ContainsKey(p.realname))
-							onSide.Add(p.realname, new Dictionary<string, Tuple<int, int>>());
-
-						foreach (Player p2 in g.players)
-						{
-							if (!onSide[p.realname].ContainsKey(p2.realname))
-								onSide[p.realname].Add(p2.realname, Tuple.Create(0, 0));
-
-							Tuple<int, int> t = onSide[p.realname][p2.realname];
-
-							onSide[p.realname][p2.realname] =
-								Tuple.Create(t.Item1 + ((p.side == p2.side) ? 1 : 0), t.Item2 + 1);
-						}
+						if (p.side == 0) s1++; else s2++;
 					}
 
+					if (s1 != s2)
+					{
+						gp++;
+						if (((s1 > s2) == (g.winSide == 1)))
+						{
+							gw++;
+							avg.Add(1);
+						}
+						else
+						{
+							avg.Add(0);
+						}
+						//							Debug.WriteLine(" bias " + avg.Average());
+
+					}
 				}
+
+				// total up how many times players have been on the same side as other playerss
+				foreach (Player p in g.players)
+				{
+					if (!onSide.ContainsKey(p.realname))
+						onSide.Add(p.realname, new Dictionary<string, Tuple<int, int>>());
+
+					foreach (Player p2 in g.players)
+					{
+						if (!onSide[p.realname].ContainsKey(p2.realname))
+							onSide[p.realname].Add(p2.realname, Tuple.Create(0, 0));
+
+						Tuple<int, int> t = onSide[p.realname][p2.realname];
+
+						onSide[p.realname][p2.realname] =
+							Tuple.Create(t.Item1 + ((p.side == p2.side) ? 1 : 0), t.Item2 + 1);
+					}
+				}
+			}
 
 			ec.Calc();
 
@@ -522,7 +520,7 @@ namespace Ranker
 
 		private void OnStartDrag(object sender, ItemDragEventArgs e)
 		{
-			Debug.Assert(e.Item!=null);
+			Debug.Assert(e.Item != null);
 			DoDragDrop(e.Item, DragDropEffects.Link);
 		}
 
@@ -631,12 +629,12 @@ namespace Ranker
 
 		private void OnTeam2Win(object sender, EventArgs e)
 		{
-			MakeGame(2);
+			MakeGame(1);
 		}
 
 		private void OnTeam1Win(object sender, EventArgs e)
 		{
-			MakeGame(1);
+			MakeGame(0);
 		}
 
 		private void OnAutobalance(object sender, EventArgs e)
@@ -729,8 +727,6 @@ namespace Ranker
 				// cant work out elo diff
 				if (Double.IsNaN(ed))
 					continue;
-
-
 
 
 
@@ -903,7 +899,6 @@ namespace Ranker
 					// new pe
 					model.UpdatePlayer(name, initialRank);
 				}
-
 			}
 			else
 			{
@@ -918,6 +913,9 @@ namespace Ranker
 					}
 
 					model.UpdatePlayer(name, initialRank);
+
+					// update the organise players controls to show the new player
+					RefreshOrganisePlayers();
 				}
 			}
 		}
