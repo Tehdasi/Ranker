@@ -132,22 +132,6 @@ namespace Ranker
 				delta[1] = eloK * (((g.WinSide() == 1) ? 1 : 0) - etelo[1]);
 			}
 
-
-
-			//				Debug.WriteLine("");
-			//				Debug.WriteLine(g.filename);
-			//				Debug.WriteLine(etelo[0]);
-
-			//foreach (Player p in g.players)
-			//    Debug.WriteLine(SideName((int)p.side) + ", " + p.name + ", " + p.realname + ", " + playerInfo[p.realname].elo );
-
-			//Debug.WriteLine("team elo: " + telo[0] + "," + telo[1]);
-			//Debug.WriteLine("win chance: " + etelo[0] + "," + etelo[1]);
-			//Debug.WriteLine(SideName(g.WinSide()) + " wins!");
-			//Debug.WriteLine("sentinel delta: " + delta[0]);
-			//Debug.WriteLine("scourge delta: " + delta[1]);
-			//				Debug.WriteLine(avg.Average());
-
 			GameInfo gi = new GameInfo(g);
 			gi.sentinelPoints = delta[0];
 			gi.scourgePoints = delta[1];

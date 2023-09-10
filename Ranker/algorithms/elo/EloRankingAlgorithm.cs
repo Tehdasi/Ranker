@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ranker
 {
-	class EloRankingAlgorithm : RankingAlgorithm
+	public class EloRankingAlgorithm : RankingAlgorithm
 	{
 		public RankingCalculator GetCalculator()
 		{
